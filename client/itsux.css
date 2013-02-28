@@ -1,0 +1,39 @@
+/* basic body styles */
+body {
+  margin:6.25%;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  color: #ffffff;
+  background-color: #000000;
+}
+
+p {margin:0; padding:0.5em 0;}
+
+/* utility classes */
+.right {float:right;}
+.center {text-align:center;}
+
+/* styles */
+#header-inner {position:fixed; height:60px; padding-top:6.25%; top:0; left:6.25%; z-index: 100;
+  background-color: #000; width: 100%;}
+
+#intro {height:60px; text-align:center; vertical-align:middle;}
+
+#login-buttons-open-change-password {display:none;}
+
+#signup {height:20%;}
+#signup #email {text-align: right;}
+#signup #go {width:220px;}
+
+.content-item .content-header {background-color: rgba(0,0,0,0.5); padding:7px 10px;}
+.content-item .content-header .content-points {float:right; padding:0;}
+.content-item .content-header h3 {font-weight: bold; font-size:14px; margin:0;
+  padding:0; line-height: 20px;}
+.content-item p {padding:0.5em 10px;}
+#discover {background:url('/man_cellphone2x.jpg') no-repeat;
+  background-size: 100% auto; height:400px;}
+
+#leaderboard {position:fixed; top:10%; left:10%; height:80%; width:80%;
+  background-color:#eee; color:black; z-index:1000;}
+#leaderboard a {display:block; float: right;}

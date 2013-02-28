@@ -1,0 +1,84 @@
+<head>
+  <title>UX is everywhere</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+</head>
+
+<body>
+  <div id="header">
+    {{> header}}
+  </div>
+
+  <div id="nav">
+    {{> dots}}
+  </div>
+
+  {{#if currentUser}}
+    {{> content}}
+    {{> leaderboard}}
+  {{else}}
+    {{> signup}}
+  {{/if}}  
+</body>
+
+<template name="header">
+  {{#if currentUser}}
+    <div id="header-inner">
+      {{loginButtons}}
+      {{#with player}}
+        <p><span id="score">{{score}}</span> pts <a id="leaderboard-link" href="#">leaderboard</a></p>
+      {{/with}}
+    </div>
+  {{else}}
+    <p id="intro">Sign up to win $100, meet the<br />UX team and learn about UX!</p>
+  {{/if}}
+</template>
+
+<template name="dots">
+  {{#constant}}
+    <svg id="dots" width="100%" height="60%">
+      <circle class="dot" cx="50%" cy="50%" r="25%" fill="white" stroke="black"></circle>
+    </svg>
+  {{/constant}}
+</template>
+
+<template name="content">
+  <div id="content">
+    <div id="discover" class="content-item" style="display:none;">
+      <div class="content-header">
+        <p class="content-points">up to 200 pts</p>
+        <h3>DISCOVER</h3>
+      </div>
+      <p>Understanding the problem, our audience, stakeholders and market.</p>
+      <p>Find a UXer, learn the secret:</p>
+      <form id="discover-challenge" class="text-challenge">
+        <input id="discover-secret" type="text" placeholder="secret" />
+        <button type="submit">Submit &amp; Get 100 pts</button>
+      </form>
+    </div>
+    <div id="design" class="content-item" style="display:none;">
+      DESIGN
+    </div>
+    <div id="deliver" class="content-item" style="display:none;">
+      DELIVER
+    </div>
+  </div>
+</template>
+
+<template name="leaderboard">
+  <div id="leaderboard" style="display:none;">
+    <a href="#">Close</a>
+    {{#each players}}
+      <p>
+        <span class="name">{{name}}</span>
+        <span class="score">{{score}}</span>
+      </p>
+    {{/each}}
+  </div>
+</template>
+
+<template name="signup">
+  <form id="signup" method="post" action="#">
+    <p class="center"><input id="email" type="text" placeholder="youremail" />@slalom.com</p>
+    <p class="center"><button id="go" type="submit">Sign up &amp; Get 100 points!</button></p>
+  </form>
+</template>
