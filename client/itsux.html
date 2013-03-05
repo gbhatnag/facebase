@@ -12,73 +12,84 @@
     {{> dots}}
   </div>
 
-  {{#if currentUser}}
-    {{> content}}
-    {{> leaderboard}}
-  {{else}}
-    {{> signup}}
-  {{/if}}  
+  <div id="main">
+    {{#if currentUser}}
+      {{> gameboard}}
+      {{> challenge}}
+      {{> leaderboard}}
+    {{else}}
+      {{> signup}}
+    {{/if}}
+  </div>
+
+  <div id="dialog_overlay" style="display:none;"></div>
 </body>
 
 <template name="header">
   {{#if currentUser}}
-    <div id="header-inner">
-      {{loginButtons}}
-      {{#with player}}
-        <p><span id="score">{{score}}</span> pts <a id="leaderboard-link" href="#">leaderboard</a></p>
-      {{/with}}
-    </div>
-  {{else}}
-    <p id="intro">Sign up to win $100, meet the<br />UX team and learn about UX!</p>
+    {{#with player}}
+      <a id="scoreboard" href="#"><span class="score">{{score}}</span> <i class="icon-trophy"></i></a>
+    {{/with}}
   {{/if}}
 </template>
 
 <template name="dots">
   {{#constant}}
-    <svg id="dots" width="100%" height="60%">
-      <circle class="dot" cx="50%" cy="50%" r="25%" fill="white" stroke="black"></circle>
+    <svg id="dots" width="320px" height="100px">
+      <circle id="discover" class="dot" cx="60px" cy="50px" r="40px" fill="white"></circle>
+      <circle id="design" class="dot" cx="160px" cy="50px" r="40px" fill="white"></circle>
+      <circle id="deliver" class="dot" cx="260px" cy="50px" r="40px" fill="white"></circle>
+      <text x="29px" y="55px" fill="black">Discover</text>
+      <text x="136px" y="55px" fill="black">Design</text>
+      <text x="237px" y="55px" fill="black">Deliver</text>
     </svg>
   {{/constant}}
 </template>
 
-<template name="content">
-  <div id="content">
-    <div id="discover" class="content-item" style="display:none;">
-      <div class="content-header">
-        <p class="content-points">up to 200 pts</p>
-        <h3>DISCOVER</h3>
-      </div>
-      <p>Understanding the problem, our audience, stakeholders and market.</p>
-      <p>Find a UXer, learn the secret:</p>
-      <form id="discover-challenge" class="text-challenge">
-        <input id="discover-secret" type="text" placeholder="secret" />
-        <button type="submit">Submit &amp; Get 100 pts</button>
-      </form>
-    </div>
-    <div id="design" class="content-item" style="display:none;">
-      DESIGN
-    </div>
-    <div id="deliver" class="content-item" style="display:none;">
-      DELIVER
-    </div>
-  </div>
-</template>
-
-<template name="leaderboard">
-  <div id="leaderboard" style="display:none;">
-    <a href="#">Close</a>
-    {{#each players}}
-      <p>
-        <span class="name">{{name}}</span>
-        <span class="score">{{score}}</span>
-      </p>
+<template name="gameboard">
+  <div id="gameboard" style="display:none;">
+    {{#each challenges}}
+      <img class="{{status}}" src="{{img}}" />
     {{/each}}
   </div>
 </template>
 
+<template name="leaderboard">
+  <div id="leaderboard" class="dialog" style="{{style}}">
+    <i id="leaderboard_close" class="icon-remove"></i>
+    <table cellpadding="0" cellspacing="0"><tbody>
+      {{#each players}}
+        <tr class="{{me}}">
+          <td class="rank">{{rank}}</td>
+          <td class="name">{{name}}</td>
+          <td class="score">{{score}}</td>
+        </tr>
+      {{/each}}
+    </tbody></table>
+  </div>
+</template>
+
+<template name="challenge">
+  <div id="challenge_dialog" class="dialog" style="display:none;">
+    <i id="challenge_close" class="icon-remove"></i>
+    {{#with challenge}}
+      {{#if completed}}
+        <p id="challenge_prompt" class="center">You got {{points}} points for {{person}}'s secret</p>
+        <p class="score center">{{secret}}</p>
+      {{else}}
+        <p id="challenge_prompt" class="center">Find {{person}} and learn {{gender}} UX secret:</p>
+        <form id="challenge_form" action="#" method="post">
+          <p class="center"><input id="secret" class="textinput required" type="text" placeholder="UX secret" /></p>
+          <p class="center"><button class="action" type="submit">Submit &amp; Get 100 points</button></p>
+        </form>
+      {{/if}}
+    {{/with}}
+  </div>
+</template>
+
 <template name="signup">
-  <form id="signup" method="post" action="#">
-    <p class="center"><input id="email" type="text" placeholder="youremail" />@slalom.com</p>
-    <p class="center"><button id="go" type="submit">Sign up &amp; Get 100 points!</button></p>
+  <form id="signup" style="display:none;" action="#" method="post">
+    <p class="center"><input id="email" class="textinput required email" type="text" placeholder="you@slalom.com" /></p>
+    <p class="center"><button class="action" type="submit">Sign up &amp; Get 100 points</button></p>
   </form>
 </template>

@@ -1,39 +1,99 @@
 /* basic body styles */
 body {
-  margin:6.25%;
+  padding:0;
+  margin:0 auto;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 20px;
   color: #ffffff;
   background-color: #000000;
 }
-
+a, a:visited {color:white;}
+a:hover, a:active {color:gray;}
 p {margin:0; padding:0.5em 0;}
 
 /* utility classes */
+.clearfix {
+  *zoom: 1;
+}
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+.clearfix:after {
+  clear: both;
+}
 .right {float:right;}
 .center {text-align:center;}
+.action {
+  border:2px solid rgb(70, 175, 91);
+  color:rgb(70, 175, 91);
+  background-color:rgb(0, 34, 4);
+  border-radius:0;
+  margin:0;
+  padding:0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size:14px;
+  line-height:28px;
+  width:240px;
+}
 
 /* styles */
-#header-inner {position:fixed; height:60px; padding-top:6.25%; top:0; left:6.25%; z-index: 100;
+#header {position:fixed; height:40px; top:0; left:0; z-index: 10;
   background-color: #000; width: 100%;}
 
-#intro {height:60px; text-align:center; vertical-align:middle;}
+#nav, #main {margin-left:auto; margin-right:auto; width:320px;}
+#nav {margin-top:40px;}
+#dots text {font-weight:bold;}
 
-#login-buttons-open-change-password {display:none;}
+#signup {margin-top:20px;}
+.textinput {
+  text-align: center;
+  border: none;
+  background-color: black;
+  border-bottom: 1px solid white;
+  padding: 5px;
+  border-radius: 0;
+  font-size: 14px;
+  width: 230px;
+  color: rgb(70, 175, 91);
+}
 
-#signup {height:20%;}
-#signup #email {text-align: right;}
-#signup #go {width:220px;}
+.score {padding-right:3px; color:rgb(70, 175, 91); font-size:20px;}
+#scoreboard {float:right; font-size:20px; padding:10px 10px 10px 0; margin:0;
+  display:block; text-decoration:none;}
 
-.content-item .content-header {background-color: rgba(0,0,0,0.5); padding:7px 10px;}
-.content-item .content-header .content-points {float:right; padding:0;}
-.content-item .content-header h3 {font-weight: bold; font-size:14px; margin:0;
-  padding:0; line-height: 20px;}
-.content-item p {padding:0.5em 10px;}
-#discover {background:url('/man_cellphone2x.jpg') no-repeat;
-  background-size: 100% auto; height:400px;}
+#gameboard {margin-left:10px; max-width:320px;}
+#gameboard img {float:left; width:80px; margin:10px;}
+#gameboard img.locked {opacity:0.3;}
 
-#leaderboard {position:fixed; top:10%; left:10%; height:80%; width:80%;
-  background-color:#eee; color:black; z-index:1000;}
-#leaderboard a {display:block; float: right;}
+.dialog {position:fixed; top:25%; left:0; height:50%; width:100%;
+  background-color:black; color:white; z-index:30; overflow-y:auto;
+  border-top:2px solid white; border-bottom:2px solid white;}
+#leaderboard.dialog {top:10%; height:80%;}
+.dialog .icon-remove {font-size: 20px; padding: 10px; float: right;}
+.dialog .icon-remove:hover {cursor:pointer;}
+#dialog_overlay {position:fixed; top:0; left:0; height:100%; width:100%; background-color:black;
+  opacity:0.7; z-index:20;}
+
+#leaderboard table {
+  max-width: 100%;
+  background-color: transparent;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin:10px auto;
+  text-align:center;
+}
+#leaderboard table td[class*="span"],
+#leaderboard table th[class*="span"] {
+  display: table-cell;
+  float: none;
+  margin-left: 0;
+}
+#leaderboard tr.me {border:1px solid rgb(70, 175, 91);}
+#leaderboard td.rank, #leaderboard td.score {text-align:center; padding:0 5px;}
+#leaderboard td.name {padding: 4px 40px; text-align:left;}
+
+#challenge_prompt {margin-top:55px;}
