@@ -27,9 +27,16 @@
 
 <template name="header">
   {{#if currentUser}}
-    {{#with player}}
-      <a id="scoreboard" href="#"><span class="score">{{score}}</span> <i class="icon-trophy"></i></a>
-    {{/with}}
+    <a id="scoreboard" href="#">
+      <div id="leaderbutton"><i class="icon-trophy"></i></div>
+      <div id="scoretext">
+        {{#with player}}
+          <span class="score">{{score}}</span>
+        {{/with}}
+        <span>{{rank}} / {{totalplayers}}</span>
+        &nbsp;
+      </div>
+    </a>
   {{/if}}
 </template>
 
@@ -66,6 +73,7 @@
         </tr>
       {{/each}}
     </tbody></table>
+    <p class="center">You're ranked {{ranking}} out of {{totalplayers}} players.</p>
   </div>
 </template>
 
@@ -77,11 +85,18 @@
         <p id="challenge_prompt" class="center">You got {{points}} points for {{person}}'s secret</p>
         <p class="score center">{{secret}}</p>
       {{else}}
-        <p id="challenge_prompt" class="center">Find {{person}} and learn {{gender}} UX secret:</p>
-        <form id="challenge_form" action="#" method="post">
-          <p class="center"><input id="secret" class="textinput required" type="text" placeholder="UX secret" /></p>
-          <p class="center"><button class="action" type="submit">Submit &amp; Get 100 points</button></p>
-        </form>
+        <div class="ch_img">
+          <img src="{{img}}" />
+        </div>
+        <div class="ch_text">
+          <p id="challenge_prompt" class="center">Find {{person}} for 100 points!</p>
+          <form id="challenge_form" action="#" method="post">
+            <p class="center">
+              <input id="secret" class="slim textinput required" type="text" placeholder="What's {{gender}} secret?" />
+              <button class="action" type="submit">Go</button>
+            </p>
+          </form>
+        </div>
       {{/if}}
     {{/with}}
   </div>
@@ -89,7 +104,7 @@
 
 <template name="signup">
   <form id="signup" style="display:none;" action="#" method="post">
-    <p class="center"><input id="email" class="textinput required email" type="text" placeholder="you@slalom.com" /></p>
-    <p class="center"><button class="action" type="submit">Sign up &amp; Get 100 points</button></p>
+    <p class="center">Sign up to win $100<br/>and engage with UX!</p>
+    <p class="center"><input id="email" class="textinput required email" type="text" placeholder="you@slalom.com" /> <button class="action" type="submit">Go</button></p>
   </form>
 </template>

@@ -3,8 +3,8 @@ body {
   padding:0;
   margin:0 auto;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  line-height: 20px;
+  font-size: 16px;
+  line-height: 24px;
   color: #ffffff;
   background-color: #000000;
 }
@@ -37,29 +37,36 @@ p {margin:0; padding:0.5em 0;}
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size:14px;
   line-height:28px;
-  width:240px;
+  width:40px;
+  height:32px;
 }
 
 /* styles */
-#header {position:fixed; height:40px; top:0; left:0; z-index: 10;
+#header {position:fixed; height:60px; top:0; left:0; z-index: 10;
   background-color: #000; width: 100%;}
+#leaderbutton {width:40px;height:40px;border-radius:20px;font-size:20px;
+  color:#000;line-height:40px;text-align:center;background:#fff; float:right;}
+#scoretext {width:200px; margin-top:10px; text-align:right;}
+
+#signup .center {margin-bottom:10px;}
 
 #nav, #main {margin-left:auto; margin-right:auto; width:320px;}
-#nav {margin-top:40px;}
-#dots text {font-weight:bold;}
+#nav {margin-top:60px;}
+#dots {font-weight:bold; font-size:14px;}
 
-#signup {margin-top:20px;}
 .textinput {
   text-align: center;
   border: none;
   background-color: black;
-  border-bottom: 1px solid white;
+  border: 1px solid white;
   padding: 5px;
   border-radius: 0;
   font-size: 14px;
-  width: 230px;
+  width: 220px;
+  height: 20px;
   color: rgb(70, 175, 91);
 }
+.slim.textinput {width:125px;}
 
 .score {padding-right:3px; color:rgb(70, 175, 91); font-size:20px;}
 #scoreboard {float:right; font-size:20px; padding:10px 10px 10px 0; margin:0;
@@ -69,7 +76,7 @@ p {margin:0; padding:0.5em 0;}
 #gameboard img {float:left; width:80px; margin:10px;}
 #gameboard img.locked {opacity:0.3;}
 
-.dialog {position:fixed; top:25%; left:0; height:50%; width:100%;
+.dialog {position:fixed; top:25%; left:0; height:33%; width:100%;
   background-color:black; color:white; z-index:30; overflow-y:auto;
   border-top:2px solid white; border-bottom:2px solid white;}
 #leaderboard.dialog {top:10%; height:80%;}
@@ -96,4 +103,7 @@ p {margin:0; padding:0.5em 0;}
 #leaderboard td.rank, #leaderboard td.score {text-align:center; padding:0 5px;}
 #leaderboard td.name {padding: 4px 40px; text-align:left;}
 
-#challenge_prompt {margin-top:55px;}
+#challenge_prompt {margin-top:33px;}
+.ch_img {float:left;}
+.ch_img img {width:70px; padding:44px 10px 0 10px;}
+.ch_text {float:left;}

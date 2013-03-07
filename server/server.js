@@ -1,9 +1,5 @@
 // UX is everywhere -- server
 
-Meteor.startup(function () {
-  console.log("server startup");
-});
-
 Meteor.publish("leaderboard", function () {
   return Players.find({}, {sort: {score: -1, name: 1}});
 });
@@ -17,34 +13,34 @@ var challenges = [
   {
     person: 'Nicole',
     gender: 'her',
-    secret: 'seattleux',
+    secret: 'understanding',
     category: 'discover',
     img: '/img/nicole-lit.jpg',
     points: 100,
     status: "open" 
   },
   {
-    person: 'Gary',
+    person: 'Ted',
     gender: 'his',
-    secret: 'seattleux',
+    secret: 'invisible',
     category: 'design',
-    img: '/img/gary-lit.jpg',
+    img: '/img/ted-lit.jpg',
     points: 100,
     status: "locked"
   },
   {
-    person: 'Barb',
-    gender: 'her',
-    secret: 'seattleux',
+    person: 'Gary',
+    gender: 'his',
+    secret: 'axure',
     category: 'deliver',
-    img: '/img/barb-lit.jpg',
+    img: '/img/gary-lit.jpg',
     points: 100,
     status: "locked"
   },
   {
     person: 'Ed',
     gender: 'his',
-    secret: 'seattleux',
+    secret: 'customer',
     category: 'discover',
     img: '/img/ed-lit.jpg',
     points: 100,
@@ -53,18 +49,45 @@ var challenges = [
   {
     person: 'Marisa',
     gender: 'her',
-    secret: 'seattleux',
+    secret: 'simplicity',
     category: 'design',
     img: '/img/marisa-lit.jpg',
     points: 100,
     status: "locked"
   },
   {
+    person: 'Gaurav',
+    gender: 'his',
+    secret: 'iterate',
+    category: 'deliver',
+    img: '/img/you-lit.jpg',
+    points: 100,
+    status: "locked"
+  },
+  {
+    person: 'Sid',
+    gender: 'his',
+    secret: 'empathy',
+    category: 'discover',
+    img: '/img/sid-lit.jpg',
+    points: 100,
+    status: "open"
+  },
+  {
     person: 'Jim',
     gender: 'his',
-    secret: 'seattleux',
-    category: 'deliver',
+    secret: 'content',
+    category: 'design',
     img: '/img/jim-lit.jpg',
+    points: 100,
+    status: "locked"
+  },
+  {
+    person: 'Barb',
+    gender: 'her',
+    secret: 'support',
+    category: 'deliver',
+    img: '/img/barb-lit.jpg',
     points: 100,
     status: "locked"
   }];
@@ -72,7 +95,6 @@ var challenges = [
 Meteor.methods({
   // options should include: name
   createPlayer: function (options) {
-    console.log('createPlayer');
     options = options || {};
     if (!(typeof options.name === "string" && options.name.length)) {
       throw new Meteor.Error(400, "Required parameter missing");
@@ -100,6 +122,8 @@ Meteor.methods({
       });
     }
 
+    console.log("TRACK: " + this.userId + " just signed up");
+
     // create and return this player
     return Players.insert({
       owner: this.userId,
@@ -112,16 +136,40 @@ Meteor.methods({
     });
   },
 
+  calculateRank: function () {
+    var userid = this.userId,
+        currentplayer = Players.findOne({owner: userid}),
+        totalplayers = Players.find({}).count(),
+        rank = 1,
+        count = 0,
+        prevscore = 0,
+        finalrank = 0;
+    Players.find({}, {sort: {score: -1, name: 1}}).forEach(function (player) {
+      count++;
+      if (player.score !== prevscore) {
+        rank = count;
+      }
+      prevscore = player.score;
+      if (player.owner === userid) {
+        finalrank = rank;
+      }
+    });
+
+    return {
+      rank: finalrank
+    };
+  },
+
   grantPoints: function (points, playerid) {
     var searchkey = {owner: this.userId};
     if (playerid && typeof playerid !== "undefined") {
       searchkey = playerid;
     }
     Players.update(searchkey, {$inc: {score: points}});
+    console.log("TRACK: " + this.userId + " scored " + points);
   },
 
-  completeChallenge: function (challenge) {
-    console.log('completeChallenge');
+  completeChallenge: function (challenge) {    
     var player = Players.findOne({owner: this.userId});
     if (!player || typeof player === "undefined") {
       throw new Meteor.Error(500, "No player with id: " + this.userId);
@@ -131,6 +179,7 @@ Meteor.methods({
     }
 
     // give player points, mark challenge as completed, track category
+    console.log("TRACK: " + this.userId + " completed challenge: " + challenge._id);
     Meteor.call("grantPoints", challenge.points);
     Challenges.update(challenge._id, {$set: {
       status: "completed",
@@ -156,14 +205,14 @@ Meteor.methods({
     if (Challenges.find({owner: this.userId, status: "completed"}).count() ===
         Challenges.find({owner: this.userId}).count()) {
       Meteor.call("grantPoints", 1000);
-      return {"msg": "UX Wizard! You get an extra 1000 points for completing the entire UX scavenger hunt."};
+      return {"msg": "UX Wizard! You get an extra 1000 points for completing the entire UX scavenger hunt. Visit us at the UX booth to claim your prize."};
     }
 
     // get extra points for completing at least one of each
     else if (player.bonus_discover && player.bonus_design && player.bonus_deliver && !player.bonus_done) {
       Meteor.call("grantPoints", 500);
       Players.update({owner: this.userId}, {$set: {bonus_done: true}});
-      return {"msg": "UX Master! You get an extra 500 points for finding one secret in each stage."};
+      return {"msg": "UX Master! You get an extra 500 points for finding one secret in each UX phase. Keep going!"};
     }
 
     // get extra points for completing an entire stage
@@ -174,7 +223,7 @@ Meteor.methods({
       }).count()) {
       Meteor.call("grantPoints", 200);
       return {"msg": "UX Pro! You get an extra 200 points for completing the entire "
-        + challenge.category + " stage."};
+        + challenge.category + " phase. Keep going!"};
     }
 
     // unlock the next stage after first challenged solved
@@ -188,15 +237,11 @@ Meteor.methods({
       }
       Challenges.update({owner: this.userId, category: unlock},
         {$set: {status: "open"}}, {multi:true});
-      return {"msg": "Congrats! You've earned 100 points and unlocked the next stage."};
+      return {"msg": "Congrats! You've earned 100 points and unlocked the " + unlock + " phase."};
     }
 
     // just get some points, no special case
     return {"msg": "100 points!"};
-
-    // things that are happening for this player:
-    // may get XXXtra points for completing all three stages - if all challenges are completed
-    // XXXtra points for 1st challenge completed - when exactly one challenge has been completed, total
   }
 
 });

@@ -7,6 +7,7 @@ Meteor.startup(function () {
   console.log('client startup');
   Session.set("challenge_selected", null);
   Session.set("leaderboard", null);
+  Session.set("currentplayer_rank", "-");
 });
 
 // Global state and helper functions
@@ -33,8 +34,22 @@ var signupfailed = false,
 
 // template functions & events
 Template.header.player = function () {
-  console.log("getting player data");
-  return Players.findOne({owner: Meteor.userId()});
+  return Players.findOne({owner:Meteor.userId()});
+};
+
+Template.header.rank = function () {
+  Meteor.call("calculateRank", function (err, data) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    Session.set("currentplayer_rank", data.rank);
+  });
+  return Session.get("currentplayer_rank");
+};
+
+Template.header.totalplayers = function () {
+  return Players.find({}).count();
 };
 
 Template.header.events({
@@ -94,6 +109,7 @@ Template.signup.events({
             } else {
               console.log('created player');
               Meteor.call('grantPoints', 100, player);
+              alert("Thanks for signing up: 100 points! Get points by learning UX secrets from team members. Players with the most points at the end of the night get cold hard cash. Top prize is a single $100 bill!");
             }
           });
         }
@@ -118,7 +134,7 @@ Template.gameboard.challenges = function () {
 Template.gameboard.events({
   'click img': function (ev) {
     if ($(ev.target).hasClass('locked')) {
-      alert("Complete an open challenge to unlock me!");
+      alert("Find a highlighted teammate's secrect to unlock me!");
       return;
     }
     Session.set("challenge_selected", null);
@@ -202,6 +218,14 @@ Template.leaderboard.players = function () {
       score: player.score
     };
   });
+};
+
+Template.leaderboard.ranking = function () {
+  return Session.get("currentplayer_rank");
+};
+
+Template.leaderboard.totalplayers = function () {
+  return Players.find({}).count();
 };
 
 Template.leaderboard.events({
